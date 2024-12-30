@@ -14,6 +14,19 @@ char	*ft_helper(char *buffer, char *temp)
 	return (new_buffer);
 }
 
+/* Manage Buffer */
+void	ft_manager(int i, char **buffer)
+{
+	char	*n_buffer;
+
+	if ((*buffer)[i])
+		n_buffer = ft_strdup(&(*buffer)[i]);
+	else
+		n_buffer = NULL;
+	free(*buffer);
+	*buffer = n_buffer;
+}
+
 /* Read file */
 char	*ft_reader(int fd, char	*buffer)
 {
@@ -44,18 +57,6 @@ char	*ft_reader(int fd, char	*buffer)
 	return (buffer);
 }
 
-/* Manage Buffer */
-void	ft_manager(int i, char **buffer)
-{
-	char	*n_buffer;
-
-	if ((*buffer)[i])
-		n_buffer = ft_strdup(&(*buffer)[i]);
-	else
-		n_buffer = NULL;
-	free(*buffer);
-	*buffer = n_buffer;
-}
 
 /* Extract line */
 char	*ft_liner(char **buffer)
@@ -97,5 +98,10 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	line = ft_liner(&buffer);
+	if (ft_strlen(buffer) == 0)
+	{
+		free(buffer);
+		buffer = NULL;
+	}
 	return (line);
 }
