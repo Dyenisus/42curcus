@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yesoytur <yesoytur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/30 13:55:41 by yesoytur          #+#    #+#             */
-/*   Updated: 2024/12/30 15:29:57 by yesoytur         ###   ########.fr       */
+/*   Created: 2024/12/30 13:55:25 by yesoytur          #+#    #+#             */
+/*   Updated: 2024/12/30 14:25:57 by yesoytur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_helper(char *buffer, char *temp)
 {
@@ -95,21 +95,21 @@ char	*ft_liner(char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[1024];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= 1024)
 		return (NULL);
-	if (!buffer || !buffer[0])
-		buffer = ft_calloc(1, 1);
-	buffer = ft_reader(fd, buffer);
-	if (!buffer)
+	if (!buffer[fd])
+		buffer[fd] = ft_calloc(1, 1);
+	buffer[fd] = ft_reader(fd, buffer[fd]);
+	if (!buffer[fd])
 		return (NULL);
-	line = ft_liner(&buffer);
-	if (!buffer || ft_strlen(buffer) == 0)
+	line = ft_liner(&buffer[fd]);
+	if (!buffer[fd] || ft_strlen(buffer[fd]) == 0)
 	{
-		free(buffer);
-		buffer = NULL;
+		free(buffer[fd]);
+		buffer[fd] = NULL;
 	}
 	return (line);
 }
